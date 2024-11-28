@@ -1,0 +1,46 @@
+extends CharacterBody2D
+
+var player_in_area = false
+
+
+
+func _ready():
+	Dialogic.signal_event.connect(DialogicSignal)
+
+func _process(delta):
+	if player_in_area:
+		if Input.is_action_just_pressed("chat"):
+				print("hola, soy alex")
+				if Global.Alex == 1:
+					run_dialogue("Alexnocap")
+				if Global.Alex == 2:
+					run_dialogue("Alex15")
+				if Global.Alex == 3:
+					run_dialogue("Alexyescap")
+				if Global.Alex == 4:
+					run_dialogue("alex3")
+			
+func run_dialogue(dialogue_string):
+	Dialogic.start(dialogue_string)
+
+func DialogicSignal(arg: String):
+	var Monedas = Global.Monedas
+	if arg == "Alex1":
+		Global.Alex = 2
+	if arg == "Alex_dinero":
+		print("Señal recibida")
+		Global.Monedas = Monedas + 100
+		$AnimatedSprite2D.play("pesca")
+		Global.Alex = 4
+
+
+
+
+func _on_chat_detection_area_body_entered(body):
+	if body.has_method("player"):
+		player_in_area = true
+	
+
+func _on_chat_detection_area_body_exited(body):
+	if body.has_method("player"):
+		player_in_area = false
